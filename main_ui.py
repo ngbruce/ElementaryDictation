@@ -4,9 +4,21 @@ import pyttsx3
 import tkinter as tk
 from tkinter import filedialog
 import threading
+from playsound import playsound
 
 global contents
 
+
+def beep_task():
+    while True:
+        beep_event.wait()  # 等待事件
+        playsound(".\\sounds\\start-13691.mp3")
+        beep_event.clear()  # 重置事件状态
+
+
+beep_event = threading.Event()  # 播放事件对象
+beep_thread = threading.Thread(target=beep_task, daemon=True)
+beep_thread.start()
 
 def choose_file():
     filepath = os.getcwd()  # 获取当前执行路径
@@ -28,8 +40,13 @@ def load_contents(filepath):
                 'Chinese': words[1]
             })
     main_list.delete(0, tk.END)
+    spdFactorEn = float(spdFactorEn_entry.get())
+    spdFactorCN = float(spdFactorCN_entry.get())
     for c in contents:
-        text = c['English']+" / "+ c['Chinese']
+        en_cnt = len(c['English'])
+        cn_cnt = len(c['Chinese'])
+        new_text = " / " + f"en({en_cnt})- {en_cnt * spdFactorEn:.2f};  cn({cn_cnt})- {cn_cnt * spdFactorCN:.2f}"
+        text = c['English'] + " / " + c['Chinese'] + new_text
         main_list.insert(tk.END, text)  # (c['English'], c['Chinese'])
 
 
@@ -38,6 +55,7 @@ def countdown(pause_time):
         mins, secs = divmod(pause_time, 60)
         timeformat = '{:02d}:{:02d}'.format(mins, secs)
         countdown_text.set(timeformat)
+        beep_event.set()
         time.sleep(1)
         pause_time -= 1
 
@@ -52,29 +70,34 @@ def dictate():
     engine.setProperty('rate', rate)  # 设置语速
     engine.setProperty('volume', vol)  # 设置音量
     voices = engine.getProperty('voices')  # 获取当前语音的详细信息
-    # print (voices)
+    # engine.setProperty('voice', voices[1].id)
+    # engine.say("attention, dictation begins now")
+    # engine.runAndWait()
+    # engine.setProperty('voice', voices[0].id)
+    # engine.say("注意，听写开始")
+    # engine.runAndWait()
     engine.setProperty('voice', voices[1].id)
-    engine.say("dictation begins now")
-    engine.runAndWait()
     for i, c in enumerate(contents):
         en_cnt = len(c['English'])
         cn_cnt = len(c['Chinese'])
-        pause_time = round(en_cnt * spdFactorEn + cn_cnt*spdFactorCN)
-        original_text = main_list.get(i)
-        new_text = original_text + "  /  " + f"en-{en_cnt}-{en_cnt * spdFactorEn:.2f}; cn-{cn_cnt}-{cn_cnt*spdFactorCN:.2f}"
-        main_list.delete(i)
-        main_list.insert(i, new_text)
-        main_list.itemconfig(i, fg="red")  # , font=('Arial', 11, 'bold')
+        pause_time = round(en_cnt * spdFactorEn + cn_cnt * spdFactorCN)
+        # original_text = main_list.get(i)
+        # new_text = original_text + "  /  " +\
+        #            f"en-{en_cnt}-{en_cnt * spdFactorEn:.2f}; cn-{cn_cnt}-{cn_cnt*spdFactorCN:.2f}"
+        # main_list.delete(i)
+        # main_list.insert(i, new_text)
+        main_list.itemconfig(i, fg="red", bg="yellow")
         main_list.see(i)
         engine.say(c['English'])
         engine.runAndWait()
         countdown(pause_time)
-        main_list.itemconfig(i, fg="black")  # , font=('Arial', 11, 'normal')
+        main_list.itemconfig(i, fg="black", bg="grey")
 
-    engine.say("dictation finished")
-    engine.runAndWait()
     engine.setProperty('voice', voices[0].id)
     engine.say("听写结束")
+    engine.runAndWait()
+    engine.setProperty('voice', voices[1].id)
+    engine.say("dictation completed, please check your answers")
     engine.runAndWait()
     engine.stop()
 
@@ -92,8 +115,8 @@ root.title("听写助手")
 file_path_var = tk.StringVar()
 file_select_frame = tk.Frame(root)
 file_select_frame.pack(side="top", fill="x")
-file_select_label = tk.Label(file_select_frame, text="选择文件：")
-file_select_label.pack(side="left")
+# file_select_label = tk.Label(file_select_frame, text="选择文件：")
+# file_select_label.pack(side="left")
 file_entry = tk.Entry(file_select_frame, textvariable=file_path_var, state="readonly")
 file_entry.pack(side="left", fill="x", expand=True)
 file_select_button = tk.Button(file_select_frame, text="打开", command=choose_file, width=10)
@@ -128,12 +151,12 @@ vol_label.pack(side="left")
 vol_entry = tk.Entry(param_frame, width=default_width)
 vol_entry.pack(side="left", fill="x", expand=True)
 vol_entry.insert(0, "1.0")
-spdFactorEn_label = tk.Label(param_frame, text="英文字符每秒：")
+spdFactorEn_label = tk.Label(param_frame, text="英文每字符秒：")
 spdFactorEn_label.pack(side="left")
 spdFactorEn_entry = tk.Entry(param_frame, width=default_width)
 spdFactorEn_entry.pack(side="left", fill="x", expand=True)
 spdFactorEn_entry.insert(0, "0.3")
-spdFactorCN_label = tk.Label(param_frame, text="中文字符每秒：")
+spdFactorCN_label = tk.Label(param_frame, text="中文每字符秒：")
 spdFactorCN_label.pack(side="left")
 spdFactorCN_entry = tk.Entry(param_frame, width=default_width)
 spdFactorCN_entry.pack(side="left", fill="x", expand=True)
