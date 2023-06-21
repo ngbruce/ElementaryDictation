@@ -1,0 +1,3 @@
+hello/你好
+good morning/早上好
+I'm fake Siri, your smart voice Manager/你想干嘛？
