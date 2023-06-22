@@ -6,7 +6,26 @@ from tkinter import filedialog
 import threading
 from playsound import playsound
 import configparser
-import winsound
+
+
+import inspect
+import ctypes
+def _async_raise(tid, exctype):
+    """raises the exception, performs cleanup if needed"""
+    tid = ctypes.c_long(tid)
+    if not inspect.isclass(exctype):
+        exctype = type(exctype)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.py_object(exctype))
+    if res == 0:
+        raise ValueError("invalid thread id")
+    elif res != 1:
+        # """if it returns a number greater than one, you're in trouble,
+        # and you should call it again with exc=NULL to revert the effect"""
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
+        raise SystemError("PyThreadState_SetAsyncExc failed")
+def stop_thread(thread):
+    _async_raise(thread.ident, SystemError)
+
 
 global contents
 global rate, vol, spdFactorEn, spdFactorCN
@@ -16,6 +35,7 @@ config_path = os.path.join(config_dir, 'config.ini')
 # 检查是否存在config_dir路径，如果没有，就创建
 if not os.path.exists(config_dir):
     os.mkdir(config_dir)
+
 
 # 保存设置
 def save_settings():
@@ -100,6 +120,9 @@ def load_contents(filepath):
 
 def countdown(pause_time):
     while pause_time:
+        if stop_event.is_set():
+            raise KeyboardInterrupt
+            return
         mins, secs = divmod(pause_time, 60)
         timeformat = '{:02d}:{:02d}'.format(mins, secs)
         countdown_text.set(timeformat)
@@ -113,59 +136,78 @@ def countdown(pause_time):
 
 
 def dictate():
-    global contents, rate, vol, spdFactorEn, spdFactorCN
-    rate = int(rate_entry.get())
-    vol = float(vol_entry.get())
-    spdFactorEn = float(spdFactorEn_entry.get())
-    spdFactorCN = float(spdFactorCN_entry.get())
-    engine = pyttsx3.init()
-    engine.setProperty('rate', rate)  # 设置语速
-    engine.setProperty('volume', vol)  # 设置音量
-    voices = engine.getProperty('voices')  # 获取当前语音的详细信息
-    engine.setProperty('voice', voices[1].id)
-    test_beep(2, 1)
-    engine.say("attention, dictation begins now")
-    engine.runAndWait()
-    engine.setProperty('voice', voices[0].id)
-    test_beep2(2, 1)
-    engine.say("注意，听写开始")
-    engine.runAndWait()
-    engine.setProperty('voice', voices[1].id)
-    for i, c in enumerate(contents):
-        en_cnt = len(c['English'])
-        cn_cnt = len(c['Chinese'])
-        pause_time = round(en_cnt * spdFactorEn + cn_cnt * spdFactorCN)
-        # original_text = main_list.get(i)
-        # new_text = original_text + "  /  " +\
-        #            f"en-{en_cnt}-{en_cnt * spdFactorEn:.2f}; cn-{cn_cnt}-{cn_cnt*spdFactorCN:.2f}"
-        # main_list.delete(i)
-        # main_list.insert(i, new_text)
-        main_list.itemconfig(i, fg="red", bg="yellow")
-        main_list.see(i)
-        engine.say(c['English'])
+    try:
+        global contents, rate, vol, spdFactorEn, spdFactorCN
+        rate = int(rate_entry.get())
+        vol = float(vol_entry.get())
+        spdFactorEn = float(spdFactorEn_entry.get())
+        spdFactorCN = float(spdFactorCN_entry.get())
+        engine = pyttsx3.init()
+        engine.setProperty('rate', rate)  # 设置语速
+        engine.setProperty('volume', vol)  # 设置音量
+        voices = engine.getProperty('voices')  # 获取当前语音的详细信息
+        engine.setProperty('voice', voices[1].id)
+        test_beep(2, 1)
+        engine.say("attention, dictation begins now")
         engine.runAndWait()
-        countdown(pause_time)
-        main_list.itemconfig(i, fg="black", bg="grey")
-        time.sleep(1)  # 避免声音冲突
+        engine.setProperty('voice', voices[0].id)
+        test_beep2(2, 1)
+        engine.say("注意，听写开始")
+        engine.runAndWait()
+        engine.setProperty('voice', voices[1].id)
+        for i, c in enumerate(contents):
+            en_cnt = len(c['English'])
+            cn_cnt = len(c['Chinese'])
+            pause_time = round(en_cnt * spdFactorEn + cn_cnt * spdFactorCN)
+            # original_text = main_list.get(i)
+            # new_text = original_text + "  /  " +\
+            #            f"en-{en_cnt}-{en_cnt * spdFactorEn:.2f}; cn-{cn_cnt}-{cn_cnt*spdFactorCN:.2f}"
+            # main_list.delete(i)
+            # main_list.insert(i, new_text)
+            main_list.itemconfig(i, fg="red", bg="yellow")
+            main_list.see(i)
+            engine.say(c['English'])
+            engine.runAndWait()
+            countdown(pause_time)
+            main_list.itemconfig(i, fg="black", bg="grey")
+            time.sleep(1)  # 避免声音冲突
 
-    engine.setProperty('voice', voices[0].id)
-    engine.say("听写结束")
-    engine.runAndWait()
-    engine.setProperty('voice', voices[1].id)
-    engine.say("dictation completed, please check your answers")
-    engine.runAndWait()
-    engine.stop()
+        engine.setProperty('voice', voices[0].id)
+        engine.say("听写结束")
+        engine.runAndWait()
+        engine.setProperty('voice', voices[1].id)
+        engine.say("dictation completed, please check your answers")
+        engine.runAndWait()
+        # engine.stop()
+        # stop_event.set()
+    finally:
+        engine.stop()
+        stop_event.set()
 
-global thread_dictate
-def start_dictate():
+
+global thread_dictate, thread_mgr
+stop_event = threading.Event()  # 事件对象，目前没用
+
+
+def start_dictate():  # 供按钮调用
+    global thread_mgr
+    thread_mgr = threading.Thread(target=dictate_mgr, daemon=True)
+    stop_event.clear()
+    thread_mgr.start()
+
+def dictate_mgr():
     global thread_dictate
     thread_dictate = threading.Thread(target=dictate, daemon=True)
     thread_dictate.start()
+    # print("以下stop_event.wait()")
+    stop_event.wait()
+    # print("stop_event. 收到，线程完结")
+
 
 
 def kill_dictate():
-    global thread_dictate
-    thread_dictate._stop()    # 使用terminate()方法终止线程
+    stop_event.set()  # 目前不起作用
+    # stop_thread(thread_dictate)  # 强行终止，还是不行，产生的异常会被忽略，只会在响音效时终止音效进程
 
 # 创建主窗口
 root = tk.Tk()
@@ -243,17 +285,11 @@ countdown_entry = tk.Entry(countdown_frame, textvariable=countdown_text, state="
 countdown_entry.pack(side="left")
 
 
-def play_sound(option: int = 1):
-    if option == 1:
-        winsound.Beep(900, 100)
-    else:
-        winsound.Beep(500, 300)
 # 发音事件
 def beep_task():
     while True:
         beep_event.wait()  # 等待事件
-        # playsound(".\\sounds\\start-13691.mp3")
-        play_sound(1)
+        playsound(".\\sounds\\start-13691.mp3")
         beep_event.clear()  # 重置事件状态
 
 
@@ -266,8 +302,7 @@ beep_thread.start()
 def beep_task2():
     while True:
         beep_event2.wait()  # 等待事件
-        # playsound(".\\sounds\\stop-13692.mp3")
-        play_sound(2)
+        playsound(".\\sounds\\stop-13692.mp3")
         beep_event2.clear()  # 重置事件状态
 
 
@@ -288,7 +323,6 @@ def test_beep2(cnt: int, interval: float):
     for i in range(cnt):
         beep_event2.set()
         time.sleep(interval)
-
 
 # 加载设置
 try:
