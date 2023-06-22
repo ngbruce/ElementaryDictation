@@ -1,0 +1,14 @@
+safe / 安全的
+cross / 横过
+traffic / 交通
+light / 灯
+crossing / 人行横道
+road / 路
+stair / 楼梯
+money / 钱
+candy / 糖果
+stranger / 陌生人
+trouble / 麻烦
+in trouble / 遇到麻烦
+hour / 小时
+without / 没有

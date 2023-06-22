@@ -1,0 +1,154 @@
+第1单元Welcome to our school
+1	have	有 /hæv; həv/
+2	many	许多 /'meni/
+3	like	像……那样 /laɪk/
+4	music	音乐 /'mju:zɪk/
+5	we	我们 /wi:/
+6	library	图书馆 /'laɪbrəri/, /'laɪbreri/
+7	our	我们的 /ɑ:(r), 'aʊə(r)/
+8	welcome	欢迎 /'welkəm/
+9	please	请 /pli:z/
+10	all	全；完全 /ɔ:l/
+11	also	还；也 /'ɔ:lsəʊ/
+12	meet	集会；开会 /mi:t/
+13	very much	非常；很
+14	way	方向 /weɪ/
+15	English lesson	英语课
+16	art club	美术（艺术）俱乐部
+17	borrow	（向某人、从某人）借 /'bɒrəʊ/, /'bɑ:rəʊ/
+18	borrow books	借书
+19	have a meeting	开会
+20	language lab	语言实验室
+21	meeting room	会议室
+22	music club	音乐俱乐部
+23	paint a picture	（用颜料）绘画
+24	play the piano	弹钢琴
+25	science lab	科学实验室
+26	science lesson	科学课
+第2单元Can I help you?
+1	car	小汽车 /kɑ:(r)/
+2	plane	飞机 /pleɪn/
+3	train	火车 /treɪn/
+4	can	能 /kæn; kən/
+5	want	要；想要 /wɒnt/, /wɑ:nt/
+6	boat	小船 /bəʊt/
+7	help	帮助 /help/
+8	buy	买 /baɪ/
+9	coat	外衣；大衣 /kəʊt/
+10	trousers	裤子；长裤 /'traʊzə(r)z/
+11	toy	玩具 /tɔɪ/
+12	bike	自行车；脚踏车 /baɪk/
+13	bus	公共汽车 /bʌs/
+14	ship	（大）船 /ʃɪp/
+15	taxi	出租汽车 /'tæksi/
+16	clothes	衣服；服装 /kləʊðz, kləʊz/
+17	short pants	短裤
+18	try	试；尝试 /traɪ/
+19	coach	教练 /kəʊtʃ/
+20	jeep	吉普车 /dʒi:p/
+21	motorbike	摩托车 /'məʊtə(r)baɪk/
+22	toy boat	玩具小船
+23	toy plane	玩具飞机
+24	toy ship	玩具轮船
+25	toy train	玩具火车
+第3单元We should obey the rules.
+1	school	学校 /sku:l/
+2	get up	起床 /'get ʌp/
+3	go home	回家
+4	go to bed	上床睡觉
+5	class	班；班级 /klɑ:s/, /klæs/
+6	children	儿童（的复数） /'tʃɪldrən/
+7	late	晚；迟 /leɪt/
+8	people	人们 /'pi:pl/
+9	quiet	安静的 /'kwaɪət/
+10	young	年轻的；岁数不大的 /jʌŋ/
+11	ask	问 /ɑ:sk/, /æsk/
+12	answer	问答 /'ɑ:nsə/, /'ænsər/
+13	eat	吃 /i:t/
+14	make	制造；做 /meɪk/
+15	think	想；想要 /θɪŋk/
+16	do housework	做家务
+17	wait	等待 /weɪt/
+18	take	学习；上（课） /teɪk/
+19	child	儿童 /tʃaɪld/
+20	question	问题 /'kwestʃən/
+21	actively	积极地 /'æktɪvli/
+22	make noise	喧闹；制造噪音
+23	keep your room clean	保持房间清洁
+24	read in bed	在床上看书
+25	go home late	晚回家
+26	help old people	帮助老人
+27	keep off the grass	不要进入草地
+28	take good care of young children	照看好儿童
+29	play on the street	在街道上玩耍
+30	pick flowers	摘花
+31	litter	换丢杂物 /'lɪtə(r)/
+第4单元What's wrong with you?
+1	ear	耳朵 /ɪə/, /ɪr/
+2	face	脸 /feɪs/
+3	for	表示接受某事物的人 /fɔ:(r); fə(r)/
+4	here	这里；在这里 /hɪə(r)/, /hɪr/
+5	Dear	（用于信函抬头前）亲爱的 /dɪə(r)/
+6	arm	胳膊 /ɑ:(r)m/
+7	head	头 /hed/
+8	bad	邪恶的；坏的 /bæd/
+9	with	和……一起 /wɪð, wɪθ/
+10	ill	有病；不舒服 /ɪl/
+11	bring	带来 /brɪŋ/
+12	afraid	害怕 /ə'freɪd/
+13	feel	觉得；感到 /fi:l/
+14	get-well card	康复卡
+15	worry	担心；担忧 /'wʌri/, /'wɜ:ri/
+16	wrong	有毛病 /rɒŋ/, /rɔ:ŋ/
+17	chocolate	巧克力 /'tʃɒklət/, /'tʃɑ:klət/
+18	dragon fruit	火龙果
+19	have a bad cold	重感冒
+20	have a cough	咳嗽
+21	have a fever	发烧
+22	have a headache	头痛
+23	have a stomachache	胃痛
+24	have a toothache	牙痛
+25	take a good rest	好好休息
+26	take some medicine	吃点儿药
+第5单元I'm cleaning my room.
+1	cousin	同辈表亲（或堂亲） /'kʌzn/
+2	play the violin	拉小提琴
+3	clean the room	打扫房间
+4	talk about	谈论……
+5	look at the picture	看图片
+6	make a call	打电话
+7	sing a song	唱歌
+8	sit	坐 /sɪt/
+9	stand	站立 /stænd/
+10	tell a story	讲故事
+11	wash the clothes	洗衣服
+12	write an email	写电子邮件
+13	play the guitar	弹吉他
+第6单元We're watching the games.
+1	play football	踢足球
+2	favourite	特别喜爱的 /'feɪvərət/
+3	feet	脚（复数） /fi:t/
+4	foot	脚 /fʊt/
+5	playground	操场 /'pleɪ,graʊnd/
+6	run	跑；奔跑 /rʌn/
+7	basketball	篮球 /'bɑ:skɪtbɔ:l/, /'bæskɪbɔ:l/
+8	watch	看 /wɒtʃ/, /wɑ:tʃ/
+9	game	游戏 /geɪm/
+10	Miss	小姐 /mɪs/
+11	Mr	先生 /'mɪstə/
+12	Mrs	夫人 /'mɪsɪz/
+13	Ms	（不指明婚否）女士 /mɪz; məz/
+14	football	足球 /'fʊtbɔ:l/
+15	high jump	跳高（运动）
+16	long jump	跳远（运动）
+17	sport	体育运动 /spɔ:(r)t/
+18	do the high jump	（做）跳高（运动）
+19	do the long jump	（做）跳远（运动）
+20	play badminton	打羽毛球
+21	play baseball	打棒球
+22	play basketball	打篮球
+23	play ping-pong	打乒乓球
+24	play tennis	打网球
+25	play volleyball	打排球
+26	run fast	跑得快
+27	watch the games	观看比赛

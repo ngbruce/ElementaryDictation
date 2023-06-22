@@ -20,6 +20,7 @@ beep_event = threading.Event()  # 播放事件对象
 beep_thread = threading.Thread(target=beep_task, daemon=True)
 beep_thread.start()
 
+
 def choose_file():
     filepath = os.getcwd()  # 获取当前执行路径
     filepath = os.path.join(filepath, 'texts')
@@ -45,7 +46,9 @@ def load_contents(filepath):
     for c in contents:
         en_cnt = len(c['English'])
         cn_cnt = len(c['Chinese'])
-        new_text = " / " + f"en({en_cnt})- {en_cnt * spdFactorEn:.2f};  cn({cn_cnt})- {cn_cnt * spdFactorCN:.2f}"
+        pause_time = round(en_cnt * spdFactorEn + cn_cnt * spdFactorCN)
+        new_text = " / " + f"en({en_cnt})- {en_cnt * spdFactorEn:.2f};  cn({cn_cnt})- {cn_cnt * spdFactorCN:.2f} " + \
+                   f" ---{pause_time}"
         text = c['English'] + " / " + c['Chinese'] + new_text
         main_list.insert(tk.END, text)  # (c['English'], c['Chinese'])
 
@@ -70,12 +73,12 @@ def dictate():
     engine.setProperty('rate', rate)  # 设置语速
     engine.setProperty('volume', vol)  # 设置音量
     voices = engine.getProperty('voices')  # 获取当前语音的详细信息
-    # engine.setProperty('voice', voices[1].id)
-    # engine.say("attention, dictation begins now")
-    # engine.runAndWait()
-    # engine.setProperty('voice', voices[0].id)
-    # engine.say("注意，听写开始")
-    # engine.runAndWait()
+    engine.setProperty('voice', voices[1].id)
+    engine.say("attention, dictation begins now")
+    engine.runAndWait()
+    engine.setProperty('voice', voices[0].id)
+    engine.say("注意，听写开始")
+    engine.runAndWait()
     engine.setProperty('voice', voices[1].id)
     for i, c in enumerate(contents):
         en_cnt = len(c['English'])
