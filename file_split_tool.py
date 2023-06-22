@@ -1,3 +1,17 @@
+''' 用于的格式：
+第1单元Welcome to our school
+1	have	有 /hæv; həv/
+2	many	许多 /'meni/
+3	like	像……那样 /laɪk/
+4	music	音乐 /'mju:zɪk/
+第2单元Can I help you?
+1	car	小汽车 /kɑ:(r)/
+2	plane	飞机 /pleɪn/
+3	train	火车 /treɪn/
+4	can	能 /kæn; kən/
+'''
+
+
 import os
 
 

@@ -1,3 +1,25 @@
+''' 用于的格式：
+第一课
+colourful [klfl] 多彩的
+
+prefer [prf:(r)] 选择；宁愿要
+
+winter [wnt(r)] 冬天
+
+第二课
+
+middle [mdl] 中间的；中等的
+
+classmate [klɑ:smet] 同班同学
+
+Australia ['strel] 澳大利亚
+
+answer [ɑ:ns(r)] 回答
+China ['tan] 中国
+
+'''
+
+
 import os
 
 
