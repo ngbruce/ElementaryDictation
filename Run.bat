@@ -1,5 +1,6 @@
 @echo off
 chcp 65001
+setlocal enabledelayedexpansion
 rem 作为命令行启动的快捷入口
 rem 可以使用 envirment.bat 使用本地复制的python环境
 rem 如果在conda 环境中使用，应注释掉 call envirment.bat
@@ -9,9 +10,9 @@ cls
 set "envsel=x"
 echo ---------------------------------------
 echo - 1 - 执行 environment.bat 配置环境
-echo - 2 - 不更改环境配置继续运行.
+echo - 2 - 不更改环境配置 
 echo - 3 - 激活conda环境，手动运行(exit退出)
-echo - 4 - 打开文件夹.
+echo - 4 - 打开文件夹
 echo - 5 - Git
 echo ---------------------------------------
 set /p "envsel=请选择Python运行环境: "
