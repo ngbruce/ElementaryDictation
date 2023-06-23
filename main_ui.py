@@ -100,6 +100,8 @@ def load_contents(filepath):
 
 def countdown(pause_time):
     while pause_time:
+        if stop_event.is_set():
+            return True
         mins, secs = divmod(pause_time, 60)
         timeformat = '{:02d}:{:02d}'.format(mins, secs)
         countdown_text.set(timeformat)
@@ -110,7 +112,7 @@ def countdown(pause_time):
             beep_event2.set()
         time.sleep(1)
         pause_time -= 1
-
+    return False
 
 def dictate():
     global contents, rate, vol, spdFactorEn, spdFactorCN
@@ -144,7 +146,14 @@ def dictate():
         main_list.see(i)
         engine.say(c['English'])
         engine.runAndWait()
-        countdown(pause_time)
+        if countdown(pause_time):
+            stop_event.clear()
+            engine.setProperty('voice', voices[0].id)
+            engine.say("听写已取消，请重新开始")
+            engine.runAndWait()
+            engine.stop()
+            print("终止")
+            return
         main_list.itemconfig(i, fg="black", bg="grey")
         time.sleep(1)  # 避免声音冲突
 
@@ -156,20 +165,25 @@ def dictate():
     engine.runAndWait()
     engine.stop()
 
+
 global thread_dictate
+stop_event = threading.Event()  # 事件对象，用于标记停止线程
+stop_event.clear()
+
 def start_dictate():
     global thread_dictate
+    stop_event.clear()
     thread_dictate = threading.Thread(target=dictate, daemon=True)
     thread_dictate.start()
 
 
 def kill_dictate():
-    global thread_dictate
-    thread_dictate._stop()    # 使用terminate()方法终止线程
+    # thread_dictate._stop()    # 使用terminate()方法终止线程
+    stop_event.set()  # 设置停止标记
 
 # 创建主窗口
 root = tk.Tk()
-root.title("听写助手")
+root.title("BB听写")
 
 # 创建文件选择框
 file_path_var = tk.StringVar()

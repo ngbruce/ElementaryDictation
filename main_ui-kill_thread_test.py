@@ -121,7 +121,8 @@ def load_contents(filepath):
 def countdown(pause_time):
     while pause_time:
         if stop_event.is_set():
-            raise KeyboardInterrupt
+            print("抛出异常")
+            raise Exception  # KeyboardInterrupt
             return
         mins, secs = divmod(pause_time, 60)
         timeformat = '{:02d}:{:02d}'.format(mins, secs)
@@ -147,13 +148,13 @@ def dictate():
         engine.setProperty('volume', vol)  # 设置音量
         voices = engine.getProperty('voices')  # 获取当前语音的详细信息
         engine.setProperty('voice', voices[1].id)
-        test_beep(2, 1)
-        engine.say("attention, dictation begins now")
-        engine.runAndWait()
-        engine.setProperty('voice', voices[0].id)
-        test_beep2(2, 1)
-        engine.say("注意，听写开始")
-        engine.runAndWait()
+        # test_beep(2, 1)
+        # engine.say("attention, dictation begins now")
+        # engine.runAndWait()
+        # engine.setProperty('voice', voices[0].id)
+        # test_beep2(2, 1)
+        # engine.say("注意，听写开始")
+        # engine.runAndWait()
         engine.setProperty('voice', voices[1].id)
         for i, c in enumerate(contents):
             en_cnt = len(c['English'])
@@ -182,7 +183,7 @@ def dictate():
         # stop_event.set()
     finally:
         engine.stop()
-        stop_event.set()
+        # stop_event.set()
 
 
 global thread_dictate, thread_mgr
@@ -287,10 +288,13 @@ countdown_entry.pack(side="left")
 
 # 发音事件
 def beep_task():
-    while True:
-        beep_event.wait()  # 等待事件
-        playsound(".\\sounds\\start-13691.mp3")
-        beep_event.clear()  # 重置事件状态
+    try:
+        while True:
+            beep_event.wait()  # 等待事件
+            playsound(".\\sounds\\start-13691.mp3")
+            beep_event.clear()  # 重置事件状态
+    except Exception as e:
+        print(f"beep-1-检测到异常：{e}")
 
 
 beep_event = threading.Event()  # 播放事件对象
@@ -300,11 +304,13 @@ beep_thread.start()
 
 # 发音事件2
 def beep_task2():
-    while True:
-        beep_event2.wait()  # 等待事件
-        playsound(".\\sounds\\stop-13692.mp3")
-        beep_event2.clear()  # 重置事件状态
-
+    try:
+        while True:
+            beep_event2.wait()  # 等待事件
+            playsound(".\\sounds\\stop-13692.mp3")
+            beep_event2.clear()  # 重置事件状态
+    except Exception as e:
+        print(f"beep-2-检测到异常：{e}")
 
 beep_event2 = threading.Event()  # 播放事件对象2
 beep_thread2 = threading.Thread(target=beep_task2, daemon=True)
