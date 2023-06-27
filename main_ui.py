@@ -9,6 +9,9 @@ import configparser
 import winsound
 
 global contents
+global contents_cn  # 中文听写用
+contents_cn= []
+# contents_cn = []
 global rate, vol, spdFactorEn, spdFactorCN
 # 配置文件路径
 config_dir = 'config'
@@ -74,6 +77,24 @@ def choose_file():
         file_path_var.set(filepath)
         load_contents(filepath)
 
+
+def choose_file_cn():
+    filepath = os.getcwd()  # 获取当前执行路径
+    filepath = os.path.join(filepath, 'texts_out_cn')
+    filepath = filedialog.askopenfilename(title="选择文件", filetypes=[("Text Files", "*.txt")], initialdir=filepath)
+    if filepath:
+        file_path_var.set(filepath)
+        load_contents_cn(filepath)
+
+
+def load_contents_cn(filepath):
+    global contents_cn
+    # contents_cn= []
+    with open(filepath, 'r', encoding='utf-8') as f:
+        for line in f:
+            word = line.strip()
+            contents_cn.append(word)
+            main_list.insert(tk.END, word)
 
 def load_contents(filepath):
     global contents
@@ -165,6 +186,50 @@ def dictate():
     engine.runAndWait()
     engine.stop()
 
+def dictate_cn():
+    global contents_cn, rate, vol, spdFactorEn, spdFactorCN
+    rate = int(rate_entry.get())
+    vol = float(vol_entry.get())
+    spdFactorEn = float(spdFactorEn_entry.get())
+    spdFactorCN = float(spdFactorCN_entry.get())
+    engine = pyttsx3.init()
+    engine.setProperty('rate', rate)  # 设置语速
+    engine.setProperty('volume', vol)  # 设置音量
+    voices = engine.getProperty('voices')  # 获取当前语音的详细信息
+    test_beep(2, 1)
+    engine.setProperty('voice', voices[0].id)
+    test_beep2(2, 1)
+    engine.say("注意，听写开始")
+    engine.runAndWait()
+    for i, c in enumerate(contents_cn):
+        cn_cnt = len(c)
+        pause_time = round( cn_cnt * spdFactorCN)
+        # original_text = main_list.get(i)
+        # new_text = original_text + "  /  " +\
+        #            f"en-{en_cnt}-{en_cnt * spdFactorEn:.2f}; cn-{cn_cnt}-{cn_cnt*spdFactorCN:.2f}"
+        # main_list.delete(i)
+        # main_list.insert(i, new_text)
+        main_list.itemconfig(i, fg="red", bg="yellow")
+        main_list.see(i)
+        engine.say(c)
+        engine.runAndWait()
+        if countdown(pause_time):
+            stop_event.clear()
+            engine.setProperty('voice', voices[0].id)
+            engine.say("听写已取消，请重新开始")
+            engine.runAndWait()
+            engine.stop()
+            print("终止")
+            return
+        main_list.itemconfig(i, fg="black", bg="grey")
+        time.sleep(1)  # 避免声音冲突
+
+    engine.setProperty('voice', voices[0].id)
+    engine.say("听写结束")
+    engine.runAndWait()
+    engine.stop()
+
+
 
 global thread_dictate
 stop_event = threading.Event()  # 事件对象，用于标记停止线程
@@ -176,6 +241,12 @@ def start_dictate():
     thread_dictate = threading.Thread(target=dictate, daemon=True)
     thread_dictate.start()
 
+
+def start_dictate_cn():
+    global thread_dictate
+    stop_event.clear()
+    thread_dictate = threading.Thread(target=dictate_cn, daemon=True)
+    thread_dictate.start()
 
 def kill_dictate():
     # thread_dictate._stop()    # 使用terminate()方法终止线程
@@ -194,6 +265,8 @@ file_select_frame.pack(side="top", fill="x")
 file_entry = tk.Entry(file_select_frame, textvariable=file_path_var, state="readonly")
 file_entry.pack(side="left", fill="x", expand=True)
 file_select_button = tk.Button(file_select_frame, text="打开", command=choose_file, width=10)
+file_select_button.pack(side="left")
+file_select_button = tk.Button(file_select_frame, text="打开cn", command=choose_file_cn, width=10)
 file_select_button.pack(side="left")
 
 # 创建列表框
@@ -237,6 +310,8 @@ spdFactorCN_entry.pack(side="left", fill="x", expand=True)
 spdFactorCN_entry.insert(0, "1.0")
 
 # 创建开始按钮
+start_button = tk.Button(root, text="开始cn", command=start_dictate_cn)
+start_button.pack(side="left")
 start_button = tk.Button(root, text="开始听写", command=start_dictate)
 start_button.pack(side="left")
 start_button = tk.Button(root, text="中止听写", command=kill_dictate)

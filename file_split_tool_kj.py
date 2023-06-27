@@ -98,7 +98,7 @@ def save_files(list_splited, save_path):
             title = title.replace(char, "")
 
         # 创建文件路径并创建文件
-        file_path = os.path.join(save_path, f"{title}.txt")
+        file_path = os.path.join(save_path, f"{title}.txt") 
         with open(file_path, "a", encoding="utf-8") as f:
             for content in unit["unit_content"]:
                 # 读取字符串列表索引为[1]和[2]的内容，中间用“ / ”拼接
