@@ -9,6 +9,7 @@ import configparser
 import winsound
 
 global contents
+contents =[]
 global contents_cn  # 中文听写用
 contents_cn= []
 # contents_cn = []
@@ -69,6 +70,19 @@ def load_settings():
     spdFactorCN_entry.insert(0, str(spdFactorCN))
 
 
+# 清除全部列表
+def clear_content():
+    global contents
+    global contents_cn
+    contents = []
+    contents_cn = []
+    main_list.delete(0, tk.END)
+    file_select_button_cn.config(state=tk.NORMAL)  # 禁用语文的打开按钮
+    start_button_cn.config(state=tk.NORMAL)  # 禁用语文的听写按钮
+    file_select_button.config(state=tk.NORMAL)  # 禁用英语的打开按钮
+    start_button.config(state=tk.NORMAL)  # 禁用英语的听写按钮
+
+
 def choose_file():
     filepath = os.getcwd()  # 获取当前执行路径
     filepath = os.path.join(filepath, 'texts')
@@ -76,6 +90,8 @@ def choose_file():
     if filepath:
         file_path_var.set(filepath)
         load_contents(filepath)
+        file_select_button_cn.config(state=tk.DISABLED)  # 禁用语文的打开按钮
+        start_button_cn.config(state=tk.DISABLED)  # 禁用语文的听写按钮
 
 
 def choose_file_cn():
@@ -85,6 +101,8 @@ def choose_file_cn():
     if filepath:
         file_path_var.set(filepath)
         load_contents_cn(filepath)
+        file_select_button.config(state=tk.DISABLED)  # 禁用英语的打开按钮
+        start_button.config(state=tk.DISABLED)  # 禁用英语的听写按钮
 
 
 def load_contents_cn(filepath):
@@ -98,7 +116,7 @@ def load_contents_cn(filepath):
 
 def load_contents(filepath):
     global contents
-    contents = []
+    # contents = []
     with open(filepath, 'r', encoding='utf-8') as f:
         for line in f:
             words = line.strip().split('/')
@@ -264,10 +282,12 @@ file_select_frame.pack(side="top", fill="x")
 # file_select_label.pack(side="left")
 file_entry = tk.Entry(file_select_frame, textvariable=file_path_var, state="readonly")
 file_entry.pack(side="left", fill="x", expand=True)
-file_select_button = tk.Button(file_select_frame, text="打开", command=choose_file, width=10)
+file_select_button_cn = tk.Button(file_select_frame, text="打开CN", command=choose_file_cn, width=8)
+file_select_button_cn.pack(side="left")
+file_select_button = tk.Button(file_select_frame, text="打开EN", command=choose_file, width=8)
 file_select_button.pack(side="left")
-file_select_button = tk.Button(file_select_frame, text="打开cn", command=choose_file_cn, width=10)
-file_select_button.pack(side="left")
+file_clear_button = tk.Button(file_select_frame, text="清除", command=clear_content, width=8)
+file_clear_button.pack(side="left")
 
 # 创建列表框
 main_list_frame = tk.Frame(root)
@@ -310,16 +330,16 @@ spdFactorCN_entry.pack(side="left", fill="x", expand=True)
 spdFactorCN_entry.insert(0, "1.0")
 
 # 创建开始按钮
-start_button = tk.Button(root, text="开始cn", command=start_dictate_cn)
+start_button_cn = tk.Button(root, text="开始CN", command=start_dictate_cn)
+start_button_cn.pack(side="left")
+start_button = tk.Button(root, text="开始EN", command=start_dictate)
 start_button.pack(side="left")
-start_button = tk.Button(root, text="开始听写", command=start_dictate)
-start_button.pack(side="left")
-start_button = tk.Button(root, text="中止听写", command=kill_dictate)
-start_button.pack(side="left")
-start_button = tk.Button(root, text="保存设置", command=save_settings)
-start_button.pack(side="right")
-start_button = tk.Button(root, text="载入设置", command=load_settings)
-start_button.pack(side="right")
+end_button = tk.Button(root, text="中止听写", command=kill_dictate)
+end_button.pack(side="left")
+save_button = tk.Button(root, text="保存设置", command=save_settings)
+save_button.pack(side="right")
+load_button = tk.Button(root, text="载入设置", command=load_settings)
+load_button.pack(side="right")
 
 # 创建倒计时文本框
 countdown_frame = tk.Frame(root)
