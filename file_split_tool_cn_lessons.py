@@ -1,5 +1,5 @@
-filepath = "texts_raw/words_cn.txt"  # 替换为实际的文件路径
-texts_cn_dir = "texts_out_cn"  # 替换为实际的目录路径
+filepath = "texts_raw/cn_6_1.txt"  # 替换为实际的文件路径
+texts_cn_dir = "texts_out_cn/六上"  # 替换为实际的目录路径
 
 # 读取文件的所有内容
 with open(filepath, "r", encoding="utf-8") as f:
