@@ -7,6 +7,8 @@ import threading
 from playsound import playsound
 import configparser
 import winsound
+import subprocess
+
 
 global contents
 contents =[]
@@ -270,6 +272,11 @@ def kill_dictate():
     # thread_dictate._stop()    # 使用terminate()方法终止线程
     stop_event.set()  # 设置停止标记
 
+
+def tts_english():
+    subprocess.run(["python", "tts_english.py"])
+
+
 # 创建主窗口
 root = tk.Tk()
 root.title("BB听写")
@@ -287,6 +294,8 @@ file_select_button_cn.pack(side="left")
 file_select_button = tk.Button(file_select_frame, text="打开EN", command=choose_file, width=8)
 file_select_button.pack(side="left")
 file_clear_button = tk.Button(file_select_frame, text="清除", command=clear_content, width=8)
+file_clear_button.pack(side="left")
+file_clear_button = tk.Button(file_select_frame, text="| 朗读->", command=tts_english, width=8)  # new
 file_clear_button.pack(side="left")
 
 # 创建列表框

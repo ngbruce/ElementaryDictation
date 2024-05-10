@@ -1,0 +1,23 @@
+country / 农村
+field / 田
+pick / 摘
+grass / 草
+give / 给
+cow / 奶牛
+sheep / 绵羊
+other / 其他的
+few / 极少
+river / 江
+goose / 鹅
+goat / 山羊
+on the farm / 在农场里
+fruit trees / 果树
+in the  field / 在田里
+pick apples / 摘苹果
+some geese / 一些鹅
+on the river / 在河上
+feed the chickens / 喂鸡
+feed the pigs / 喂猪
+grow flowers / 种花
+plant trees / 种树
+a few / 几
