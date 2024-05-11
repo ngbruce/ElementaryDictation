@@ -274,7 +274,10 @@ def kill_dictate():
 
 
 def tts_english():
-    subprocess.run(["python", "tts_english.py"])
+    # subprocess.run(["python", "tts_english.py"])
+    start_new_session = True
+    subprocess.Popen(["python", "tts_english.py"])  # 不阻塞当前进程 , start_new_session=True
+    exit()
 
 
 # 创建主窗口
