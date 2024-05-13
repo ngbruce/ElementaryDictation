@@ -41,6 +41,16 @@ def speak():
     threading.Thread(target=say, args=(text, rate)).start()
 
 
+# 定义清理换行函数，把text_area内容中换行符替换为空格
+def clear_new_line():
+    text = text_area.get("1.0", tk.END)
+    text = text.replace('\n', ' ')
+    text_area.delete("1.0", tk.END)
+    text_area.insert("1.0", text)
+
+
+
+
 # 定义使用pyttsx3引擎的say函数
 def say(text, rate):
     # 设置语速
@@ -54,6 +64,10 @@ def say(text, rate):
 
 # 创建一个按钮，标题为“朗读”
 speak_button = tk.Button(root, text="朗读", command=speak)
+speak_button.pack(pady=10)
+
+# 创建一个按钮，标题为“清理换行”
+speak_button = tk.Button(root, text="清理换行", command=clear_new_line)
 speak_button.pack(pady=10)
 
 # 运行Tkinter主循环
